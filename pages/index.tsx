@@ -14,7 +14,7 @@ const HomePage: NextPage<Props> = ({ pokemons }) => {
   return (
     <Layout title="Lista de Pokemon">
       <h1>Lista de Pokemons</h1>
-      <Grid.Container gap={2} justify={'flex-start'}>
+      <Grid.Container gap={2}>
         {pokemons.map(({ id, name, img }) => (
           <PokemonCard key={id} id={id} name={name} img={img} />
         ))}

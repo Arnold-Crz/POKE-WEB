@@ -1,11 +1,18 @@
 import { Button, Card, Col, Grid, Row, Text } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 
 import { SmallPokemon } from '../../interfaces';
 
 export function PokemonCard({ id, name, img }: SmallPokemon) {
+  const router = useRouter();
+
+  const clickPokeInfo = () => {
+    router.push(`/pokemon/${id}`);
+  };
+
   return (
-    <Grid xs={6} sm={3} md={2} xl={1} key={id}>
-      <Card>
+    <Grid sm={6} md={4} key={id}>
+      <Card css={{ width: '400px' }}>
         <Card.Header>
           <Col>
             <Text size={12} weight="bold" transform="uppercase" color="#9E9E9E">
@@ -43,9 +50,9 @@ export function PokemonCard({ id, name, img }: SmallPokemon) {
                 css={{ color: '#fff' }}
                 size={12}
                 weight="bold"
-                transform="uppercase"
+                onClick={clickPokeInfo}
               >
-                # {id}
+                Ver Info
               </Text>
             </Button>
           </Row>
