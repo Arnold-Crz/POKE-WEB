@@ -8,7 +8,11 @@ import canvas from 'canvas-confetti';
 import { pokeApi } from '../../api';
 import { Layout } from '@/components/layouts';
 import { Pokemon } from '../../interfaces';
-import { existePokemonFavorito, toggleFavorites } from '../../helpers/';
+import {
+  existePokemonFavorito,
+  getPokemon,
+  toggleFavorites,
+} from '../../helpers/';
 
 interface Props {
   pokemon: Pokemon;
@@ -116,12 +120,21 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params as { id: string };
-  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${id}`);
+  const pokemon = await getPokemon(id);
 
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false, // Esto permite validar si la redirección es permanente o no por que puede que se actulize la página y no se redireccione ya que ese resultado ya es valido.
+      },
+    };
+  }
   return {
     props: {
-      pokemon: data,
+      pokemon,
     },
+    revalidate: 86400, // cada 10 se la paginas se vuelve a renderizar 86400 = 60 * 60 * 24 cada dia
   };
 };
 
