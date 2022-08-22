@@ -7,14 +7,18 @@ import canvas from 'canvas-confetti';
 
 import { pokeApi } from '../../api';
 import { Layout } from '@/components/layouts';
-import { Pokemon } from '../../interfaces';
-import { existePokemonFavorito, toggleFavorites } from '../../helpers/';
+import { Pokemon, PokemonListResponse } from '../../interfaces';
+import {
+  existePokemonFavorito,
+  getPokemon,
+  toggleFavorites,
+} from '../../helpers/';
 
 interface Props {
   pokemon: Pokemon;
 }
 
-const PokePage: NextPage<Props> = ({ pokemon }) => {
+const PokePageName: NextPage<Props> = ({ pokemon }) => {
   const [favorited, setFavorited] = useState(existePokemonFavorito(pokemon.id));
 
   const onTogleFavorite = () => {
@@ -43,7 +47,7 @@ const PokePage: NextPage<Props> = ({ pokemon }) => {
             <Card.Body>
               <Card.Image
                 src={
-                  pokemon.sprites.other?.dream_world.front_default || '/no_img'
+                  pokemon.sprites.other?.dream_world?.front_default || '/no_img'
                 }
                 alt={name}
                 width={100}
@@ -104,25 +108,26 @@ const PokePage: NextPage<Props> = ({ pokemon }) => {
   );
 };
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-  const pokemon151 = [...Array(151)].map((value, i) => `${i + 1}`);
+  const { data } = await pokeApi.get<PokemonListResponse>('/pokemon?limit=151');
+  const pokemosNames: string[] = data.results.map((pokemon) => pokemon.name);
 
   return {
-    paths: pokemon151.map((id) => ({
-      params: { id },
+    paths: pokemosNames.map((name) => ({
+      params: { name },
     })),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params as { id: string };
-  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${id}`);
+  const { name } = params as { name: string };
+  const { pokemon } = await getPokemon(name);
 
   return {
     props: {
-      pokemon: data,
+      pokemon,
     },
   };
 };
 
-export default PokePage;
+export default PokePageName;

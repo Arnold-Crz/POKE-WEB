@@ -7,7 +7,7 @@ export function PokemonCard({ id, name, img }: SmallPokemon) {
   const router = useRouter();
 
   const clickPokeInfo = () => {
-    router.push(`/pokemon/${id}`);
+    router.push(`/name/${name}`);
   };
 
   return (

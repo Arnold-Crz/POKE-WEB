@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Layout } from '../../components/layouts';
-import { NoFavoritos, PokemonFavorito } from '../../components/ui';
-import { pokemons } from '../../helpers/localFavorites';
+import { useEffect, useState } from 'react';
+import { Layout } from '@/components/layouts';
+import { NoFavoritos, PokemonFavorito } from '@/components/ui';
+import { pokemons } from '@/helpers/localFavorites';
 
 function FavoritesPages() {
   const [favoritos, setFavoritos] = useState<number[]>([]);

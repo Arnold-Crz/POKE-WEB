@@ -1,1 +1,2 @@
-export {toggleFavorites, existePokemonFavorito} from './localFavorites';
+export {toggleFavorites, existePokemonFavorito } from './localFavorites';
+export { getPokemon } from './getPokemon';
